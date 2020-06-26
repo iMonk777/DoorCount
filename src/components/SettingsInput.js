@@ -2,7 +2,10 @@ import React from 'react';
 import {View, Text, StyleSheet, TextInput} from 'react-native';
 import {color} from '../Styles/colors';
 
-export default function SettingsInput({message, placeholder}) {
+export default function SettingsInput({message, placeholder, action}) {
+  const changeText = (person) => {
+    action(person);
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.message}>{message}</Text>
@@ -10,7 +13,8 @@ export default function SettingsInput({message, placeholder}) {
         style={styles.input}
         placeholder={placeholder}
         placeholderTextColor={color.textPlaceholder}
-        keyboardType={'number-pad'}></TextInput>
+        keyboardType={'number-pad'}
+        onChangeText={(person) => changeText(person)}></TextInput>
     </View>
   );
 }
@@ -27,7 +31,6 @@ const styles = StyleSheet.create({
     color: color.text,
     fontWeight: 'bold',
     fontSize: 24,
-    // borderWidth: 1,
     width: '100%',
     textAlign: 'center',
     marginBottom: 10,
