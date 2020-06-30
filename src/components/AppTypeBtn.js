@@ -4,18 +4,13 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {color} from '../Styles/colors';
 
-// const navigateToInitSettings = (connectionType) => {
-//   //   console.warn(navigation.navigate);
-//   console.warn(connectionType);
-// };
-
 const AppTypeBtn = ({message, connectionType}) => {
   const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('Settings');
+        navigation.navigate('InitSettings');
       }}>
       <View style={styles.container}>
         <Text style={styles.text}>{message}</Text>

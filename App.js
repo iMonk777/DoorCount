@@ -3,8 +3,10 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import Home from './src/components/Home';
-import Settings from './src/components/Settings';
+import HomeScreen from './src/components/HomeScreen';
+import InitSettingsScreen from './src/components/InitSettingsScreen';
+import CountScreen from './src/components/CountScreen';
+import InAppSettingsScreen from './src/components/InAppSettingsScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,12 +16,22 @@ const App: () => React$Node = () => {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Home"
-          component={Home}
+          component={HomeScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="Settings"
-          component={Settings}
+          name="InitSettings"
+          component={InitSettingsScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CountScreen"
+          component={CountScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="InAppSettings"
+          component={InAppSettingsScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
