@@ -9,35 +9,48 @@ import {color} from '../Styles/colors';
 import SettingInput from './SettingsInput';
 import SettingsToggle from './SettingsToggle';
 import ActionButton from './ActionButton';
+import AsyncStorage from '@react-native-community/async-storage';
+import {set} from 'react-native-reanimated';
 
-export default class Settings extends Component {
+export default class InAppSettingsScreen extends Component {
   state = {
     countLimit: 100,
     currentPeople: 0,
-    soundFeedback: true,
-    volumeCount: true,
+    hapticFeedback: true,
     countOverLimit: true,
+    isInitialSetting: true,
+  };
+
+  getSettings = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('settings');
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  storeSettings = async (settings) => {
+    try {
+      const jsonValue = JSON.stringify(settings);
+      await AsyncStorage.setItem('settings', jsonValue);
+    } catch (e) {}
   };
 
   changelimit = (limit) => {
     this.setState({
-      countLimit: limit,
+      countLimit: Number(limit),
     });
   };
 
   setCurrentPeople = (people) => {
     this.setState({
-      currentPeople: people,
+      currentPeople: Number(people),
     });
   };
-  toggleSoundFeedback = () => {
+  toggleHapticFeedback = () => {
     this.setState({
-      soundFeedback: !this.state.soundFeedback,
-    });
-  };
-  toggleVolumeCount = () => {
-    this.setState({
-      volumeCount: !this.state.volumeCount,
+      hapticFeedback: !this.state.hapticFeedback,
     });
   };
   toggleCountOverLimit = () => {
@@ -46,7 +59,8 @@ export default class Settings extends Component {
     });
   };
 
-  goBack = () => {
+  goBack = async () => {
+    await this.storeSettings(this.state);
     this.props.navigation.goBack();
   };
 
@@ -54,7 +68,18 @@ export default class Settings extends Component {
     this.props.navigation.navigate('CountScreen');
   };
 
-  startCount = () => {};
+  goHome = () => {
+    this.props.navigation.navigate('Home');
+  };
+
+  async componentDidMount() {
+    let settings = await this.getSettings();
+    settings = {
+      ...settings,
+      currentPeople: this.props.route.params.currentPeople,
+    };
+    this.setState(settings);
+  }
 
   render() {
     return (
@@ -63,7 +88,7 @@ export default class Settings extends Component {
           <SettingInput
             message={'Add a person limit'}
             people={60}
-            placeholder={'100'}
+            placeholder={String(this.state.countLimit)}
             action={(limit) => {
               this.changelimit(limit);
             }}
@@ -71,20 +96,15 @@ export default class Settings extends Component {
           <SettingInput
             message={'People currently inside'}
             people={4}
-            placeholder={'0'}
+            placeholder={String(this.state.currentPeople)}
             action={(people) => {
               this.setCurrentPeople(people);
             }}
           />
           <SettingsToggle
-            message={'Sound feedback'}
-            value={this.state.soundFeedback}
-            action={this.toggleSoundFeedback}
-          />
-          <SettingsToggle
-            message={'Count using volume buttons'}
-            value={this.state.volumeCount}
-            action={this.toggleVolumeCount}
+            message={'Haptic feedback'}
+            value={this.state.hapticFeedback}
+            action={this.toggleHapticFeedback}
           />
           <SettingsToggle
             message={'Allow count over limit'}
@@ -93,18 +113,18 @@ export default class Settings extends Component {
           />
           <View style={styles.actionButtons}>
             <ActionButton
-              message={'Back'}
+              message={'Save'}
               width={150}
               height={60}
               fontSize={22}
               action={this.goBack}
             />
             <ActionButton
-              message={'Start'}
+              message={'Exit'}
               width={200}
               height={87}
               fontSize={36}
-              action={this.goToCountScreen}
+              action={this.goHome}
             />
           </View>
         </View>

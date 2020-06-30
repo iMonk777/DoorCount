@@ -14,7 +14,8 @@ export default function SettingsInput({message, placeholder, action}) {
         placeholder={placeholder}
         placeholderTextColor={color.textPlaceholder}
         keyboardType={'number-pad'}
-        onChangeText={(person) => changeText(person)}></TextInput>
+        onChangeText={(person) => changeText(person)}
+        contextMenuHidden={true}></TextInput>
     </View>
   );
 }
