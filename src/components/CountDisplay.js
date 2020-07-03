@@ -32,17 +32,23 @@ export default function CountDisplay({counter, limit}) {
       </View>
 
       <Text style={counterStyles.counter}>{counter}</Text>
-      <TouchableOpacity
-        style={styles.iconContainer}
-        onPress={() => {
-          navigation.navigate('InAppSettings', {currentPeople: counter});
-        }}>
-        <Icon
-          style={styles.settingsIcon}
-          name={'md-settings'}
-          type={'Ionicons'}
-        />
-      </TouchableOpacity>
+      <View style={styles.settingsAndGraph}>
+        <TouchableOpacity
+          style={styles.iconContainer}
+          onPress={() => {
+            navigation.navigate('ReportScreen');
+          }}>
+          <Icon style={styles.icon} name={'graph'} type={'SimpleLineIcons'} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.iconContainer}
+          onPress={() => {
+            navigation.navigate('InAppSettings', {currentPeople: counter});
+          }}>
+          <Icon style={styles.icon} name={'md-settings'} type={'Ionicons'} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -64,7 +70,12 @@ const styles = StyleSheet.create({
     height: 90,
     justifyContent: 'flex-end',
   },
-  settingsIcon: {
+  settingsAndGraph: {
+    // borderWidth: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
+  icon: {
     color: color.text,
     fontSize: 50,
     alignSelf: 'flex-end',

@@ -10,7 +10,6 @@ import SettingInput from './SettingsInput';
 import SettingsToggle from './SettingsToggle';
 import ActionButton from './ActionButton';
 import AsyncStorage from '@react-native-community/async-storage';
-import {set} from 'react-native-reanimated';
 
 export default class InAppSettingsScreen extends Component {
   state = {
@@ -74,10 +73,12 @@ export default class InAppSettingsScreen extends Component {
 
   async componentDidMount() {
     let settings = await this.getSettings();
+
     settings = {
       ...settings,
       currentPeople: this.props.route.params.currentPeople,
     };
+
     this.setState(settings);
   }
 
