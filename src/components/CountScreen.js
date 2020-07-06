@@ -28,7 +28,7 @@ export default class CountScreen extends Component {
         timeStamp: Date.now(),
       },
     ];
-    // console.warn(this.counts);
+    this.counts.length == 5 ? this.storeCountsToAsync() : null;
   };
 
   storeCountsToAsync = async () => {
@@ -51,7 +51,7 @@ export default class CountScreen extends Component {
     }
   };
 
-  countUp = () => {
+  countUp = async () => {
     if (
       this.state.countOverLimit == false &&
       this.state.currentPeople >= this.state.countLimit
@@ -59,23 +59,21 @@ export default class CountScreen extends Component {
       return;
     }
     this.state.hapticFeedback == true ? Vibration.vibrate(50) : null;
-    this.setState({
+    await this.setState({
       currentPeople: this.state.currentPeople + 1,
     });
     this.storeToCountsArray();
-    this.counts.length == 5 ? this.storeCountsToAsync() : null;
   };
 
-  countDown = () => {
+  countDown = async () => {
     if (this.state.currentPeople === 0) {
       return;
     }
     this.state.hapticFeedback == true ? Vibration.vibrate(50) : null;
-    this.setState({
+    await this.setState({
       currentPeople: this.state.currentPeople - 1,
     });
     this.storeToCountsArray();
-    this.counts.length == 5 ? this.storeCountsToAsync() : null;
   };
 
   getSettings = async (shouldSetState) => {
@@ -86,7 +84,7 @@ export default class CountScreen extends Component {
 
       return settings;
     } catch (e) {
-      // error reading value
+      console.log(e);
     }
   };
 
