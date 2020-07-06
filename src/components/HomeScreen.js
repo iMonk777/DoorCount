@@ -11,10 +11,10 @@ const Home = ({navigation}) => {
       <AppTypeBtn
         message={'One person use'}
         connectionType={'(offline)'}></AppTypeBtn>
-      <AppTypeBtn
+      {/* <AppTypeBtn
         message={'Use with colleagues'}
         connectionType={'(online)'}
-        navigation={navigation}></AppTypeBtn>
+        navigation={navigation}></AppTypeBtn> */}
     </View>
   );
 };

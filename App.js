@@ -7,6 +7,7 @@ import HomeScreen from './src/components/HomeScreen';
 import InitSettingsScreen from './src/components/InitSettingsScreen';
 import CountScreen from './src/components/CountScreen';
 import InAppSettingsScreen from './src/components/InAppSettingsScreen';
+import ReportScreen from './src/components/ReportScreen';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,11 @@ const App: () => React$Node = () => {
         <Stack.Screen
           name="InAppSettings"
           component={InAppSettingsScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ReportScreen"
+          component={ReportScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

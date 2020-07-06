@@ -18,6 +18,7 @@ export default class InitSettingsScreen extends Component {
     hapticFeedback: true,
     countOverLimit: true,
     isInitialSetting: true,
+    startTime: Date.now(),
   };
 
   storeSettings = async (settings) => {

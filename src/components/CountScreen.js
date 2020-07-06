@@ -13,9 +13,45 @@ export default class CountScreen extends Component {
     hapticFeedback: true,
     countOverLimit: true,
     isInitialSetting: true,
+    records: [],
+    startTime: null,
   };
 
-  countUp = () => {
+  counts = [];
+
+  storeToCountsArray = () => {
+    this.counts = [
+      ...this.counts,
+      {
+        x: Math.round((Date.now() - this.state.startTime) / 100),
+        y: this.state.currentPeople,
+        timeStamp: Date.now(),
+      },
+    ];
+    this.counts.length == 5 ? this.storeCountsToAsync() : null;
+  };
+
+  storeCountsToAsync = async () => {
+    let storedAsyncCounts = [];
+    try {
+      const jsonCounts = await AsyncStorage.getItem('counts');
+      storedAsyncCounts = jsonCounts == null ? [] : JSON.parse(jsonCounts);
+    } catch (e) {
+      console.log(e);
+    }
+
+    storedAsyncCounts = [...storedAsyncCounts, ...this.counts];
+
+    try {
+      const jsonCounts = JSON.stringify(storedAsyncCounts);
+      await AsyncStorage.setItem('counts', jsonCounts);
+      this.counts = [];
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  countUp = async () => {
     if (
       this.state.countOverLimit == false &&
       this.state.currentPeople >= this.state.countLimit
@@ -23,38 +59,59 @@ export default class CountScreen extends Component {
       return;
     }
     this.state.hapticFeedback == true ? Vibration.vibrate(50) : null;
-    this.setState({
+    await this.setState({
       currentPeople: this.state.currentPeople + 1,
     });
+    this.storeToCountsArray();
   };
 
-  countDown = () => {
+  countDown = async () => {
+    if (this.state.currentPeople === 0) {
+      return;
+    }
     this.state.hapticFeedback == true ? Vibration.vibrate(50) : null;
-    this.state.currentPeople === 0
-      ? null
-      : this.setState({
-          currentPeople: this.state.currentPeople - 1,
-        });
+    await this.setState({
+      currentPeople: this.state.currentPeople - 1,
+    });
+    this.storeToCountsArray();
   };
 
-  getSettings = async () => {
+  getSettings = async (shouldSetState) => {
     try {
       const jsonValue = await AsyncStorage.getItem('settings');
       let settings = JSON.parse(jsonValue);
-      this.setState(settings);
+      shouldSetState == true ? this.setState(settings) : null;
+
+      return settings;
     } catch (e) {
-      // error reading value
+      console.log(e);
     }
   };
 
+  storePeople = async () => {
+    let settings = await this.getSettings(false);
+    try {
+      const jsonValue = JSON.stringify({
+        ...settings,
+        currentPeople: this.state.currentPeople,
+      });
+      await AsyncStorage.setItem('settings', jsonValue);
+    } catch (e) {}
+  };
+
   onFocusHandler = () => {
-    this.getSettings();
+    this.getSettings(true);
+  };
+  onBlurHandler = () => {
+    this.storePeople();
   };
 
   async componentDidMount() {
-    // this.getSettings();
     this.focusListener = this.props.navigation.addListener('focus', () => {
       this.onFocusHandler();
+    });
+    this.focusListener = this.props.navigation.addListener('blur', () => {
+      this.onBlurHandler();
     });
   }
 
