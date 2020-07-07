@@ -5,6 +5,7 @@ import {color} from '../Styles/colors';
 import CountDisplay from './CountDisplay';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useIsFocused} from '@react-navigation/native';
+import ExitMenu from './ExitMenu';
 
 export default class CountScreen extends Component {
   state = {
@@ -15,6 +16,7 @@ export default class CountScreen extends Component {
     isInitialSetting: true,
     records: [],
     startTime: null,
+    isExit: false,
   };
 
   counts = [];
@@ -99,6 +101,27 @@ export default class CountScreen extends Component {
     } catch (e) {}
   };
 
+  showExitMenu = () => {
+    this.setState({
+      isExit: true,
+    });
+  };
+
+  hideExitMenu = () => {
+    this.setState({
+      isExit: false,
+    });
+  };
+
+  goToHomeScreen = () => {
+    this.props.navigation.navigate('Home');
+    this.storeEmpty();
+  };
+
+  storeEmpty = async () => {
+    await AsyncStorage.setItem('counts', JSON.stringify([]));
+  };
+
   onFocusHandler = () => {
     this.getSettings(true);
   };
@@ -118,16 +141,25 @@ export default class CountScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <ActionButton
-          message={'+'}
-          width={'100%'}
-          height={186}
-          fontSize={72}
-          action={this.countUp}
-        />
+        {this.state.isExit == true ? (
+          <ExitMenu
+            hideExitMenu={this.hideExitMenu}
+            goToHomeScreen={this.goToHomeScreen}
+          />
+        ) : (
+          <ActionButton
+            message={'+'}
+            width={'100%'}
+            height={186}
+            fontSize={72}
+            action={this.countUp}
+          />
+        )}
+
         <CountDisplay
           counter={this.state.currentPeople}
           limit={this.state.countLimit}
+          showExitMenu={this.showExitMenu}
         />
         <ActionButton
           message={'-'}

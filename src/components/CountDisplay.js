@@ -4,7 +4,7 @@ import {color} from '../Styles/colors';
 import {Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
-export default function CountDisplay({counter, limit}) {
+export default function CountDisplay({counter, limit, showExitMenu}) {
   const counterStyles = StyleSheet.create({
     counter: {
       color:
@@ -22,19 +22,34 @@ export default function CountDisplay({counter, limit}) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.iconContainer}>
-        {counter >= limit * 0.8 ? (
-          <View>
-            <Icon style={styles.limitIcon} name={'triangle'} type={'Feather'} />
-            <Text style={styles.limitText}>{limit}</Text>
-          </View>
-        ) : null}
+      <View style={styles.settingsAndGraph}>
+        <TouchableOpacity
+          style={styles.topIconContainer}
+          onPress={showExitMenu}>
+          <Icon
+            style={styles.exitIcon}
+            name={'exit-run'}
+            type={'MaterialCommunityIcons'}
+          />
+        </TouchableOpacity>
+        <View style={styles.topIconContainer}>
+          {counter >= limit * 0.8 ? (
+            <View>
+              <Icon
+                style={styles.limitIcon}
+                name={'triangle'}
+                type={'Feather'}
+              />
+              <Text style={styles.limitText}>{limit}</Text>
+            </View>
+          ) : null}
+        </View>
       </View>
 
       <Text style={counterStyles.counter}>{counter}</Text>
       <View style={styles.settingsAndGraph}>
         <TouchableOpacity
-          style={styles.iconContainer}
+          style={styles.bottomIconContainer}
           onPress={() => {
             navigation.navigate('ReportScreen');
           }}>
@@ -42,7 +57,7 @@ export default function CountDisplay({counter, limit}) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.iconContainer}
+          style={styles.bottomIconContainer}
           onPress={() => {
             navigation.navigate('InAppSettings', {currentPeople: counter});
           }}>
@@ -63,12 +78,19 @@ const styles = StyleSheet.create({
     // borderColor: 'white',
     padding: 20,
   },
-  iconContainer: {
+  bottomIconContainer: {
     // borderWidth: 3,
     // borderColor: 'red',
     alignSelf: 'flex-end',
     height: 90,
     justifyContent: 'flex-end',
+  },
+  topIconContainer: {
+    // borderWidth: 3,
+    // borderColor: 'red',
+    alignSelf: 'flex-end',
+    height: 90,
+    justifyContent: 'center',
   },
   settingsAndGraph: {
     // borderWidth: 1,
@@ -78,7 +100,11 @@ const styles = StyleSheet.create({
   icon: {
     color: color.text,
     fontSize: 50,
-    alignSelf: 'flex-end',
+  },
+  exitIcon: {
+    color: color.text,
+    fontSize: 50,
+    transform: [{rotateY: '180deg'}],
   },
   limitIcon: {
     color: color.countSad,
