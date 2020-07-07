@@ -120,13 +120,13 @@ export default class InAppSettingsScreen extends Component {
               fontSize={22}
               action={this.goBack}
             />
-            <ActionButton
+            {/* <ActionButton
               message={'Exit'}
               width={200}
               height={87}
               fontSize={36}
               action={this.goHome}
-            />
+            /> */}
           </View>
         </View>
       </TouchableWithoutFeedback>

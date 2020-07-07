@@ -57,6 +57,11 @@ export default class InitSettingsScreen extends Component {
   goToCountScreen = async () => {
     await this.storeSettings(this.state);
     this.props.navigation.navigate('CountScreen');
+    this.storeEmpty();
+  };
+
+  storeEmpty = async () => {
+    await AsyncStorage.setItem('counts', JSON.stringify([]));
   };
 
   render() {
