@@ -6,6 +6,11 @@ import CountDisplay from './CountDisplay';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useIsFocused} from '@react-navigation/native';
 import ExitMenu from './ExitMenu';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 export default class CountScreen extends Component {
   state = {
@@ -55,8 +60,9 @@ export default class CountScreen extends Component {
 
   countUp = async () => {
     if (
-      this.state.countOverLimit == false &&
-      this.state.currentPeople >= this.state.countLimit
+      (this.state.countOverLimit == false &&
+        this.state.currentPeople >= this.state.countLimit) ||
+      this.state.currentPeople == 9999
     ) {
       return;
     }
@@ -114,7 +120,7 @@ export default class CountScreen extends Component {
   };
 
   goToHomeScreen = () => {
-    this.props.navigation.navigate('Home');
+    this.props.navigation.navigate('InitSettings');
     this.storeEmpty();
   };
 
@@ -150,8 +156,8 @@ export default class CountScreen extends Component {
           <ActionButton
             message={'+'}
             width={'100%'}
-            height={186}
-            fontSize={72}
+            height={hp('20%')}
+            fontSize={hp('10%')}
             action={this.countUp}
           />
         )}
@@ -164,8 +170,8 @@ export default class CountScreen extends Component {
         <ActionButton
           message={'-'}
           width={'100%'}
-          height={186}
-          fontSize={72}
+          height={hp('20%')}
+          fontSize={hp('10%')}
           action={this.countDown}
         />
       </View>
@@ -177,7 +183,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.background,
-    paddingTop: 50,
+    paddingTop: getStatusBarHeight() + 5,
     paddingBottom: 20,
     paddingHorizontal: 20,
     flexDirection: 'column',

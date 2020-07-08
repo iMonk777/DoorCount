@@ -4,12 +4,19 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {color} from '../Styles/colors';
 import SettingInput from './SettingsInput';
 import SettingsToggle from './SettingsToggle';
 import ActionButton from './ActionButton';
 import AsyncStorage from '@react-native-community/async-storage';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {set} from 'react-native-reanimated';
 
 export default class InAppSettingsScreen extends Component {
   state = {
@@ -67,9 +74,7 @@ export default class InAppSettingsScreen extends Component {
     this.props.navigation.navigate('CountScreen');
   };
 
-  goHome = () => {
-    this.props.navigation.navigate('Home');
-  };
+  notState = {};
 
   async componentDidMount() {
     let settings = await this.getSettings();
@@ -78,18 +83,20 @@ export default class InAppSettingsScreen extends Component {
       ...settings,
       currentPeople: this.props.route.params.currentPeople,
     };
-
+    this.notState = settings;
     this.setState(settings);
   }
 
   render() {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS == 'ios' ? 'padding' : null}
+          style={styles.container}>
           <SettingInput
             message={'Add a person limit'}
             people={60}
-            placeholder={String(this.state.countLimit)}
+            placeholder={String(this.notState.countLimit)}
             action={(limit) => {
               this.changelimit(limit);
             }}
@@ -97,7 +104,7 @@ export default class InAppSettingsScreen extends Component {
           <SettingInput
             message={'People currently inside'}
             people={4}
-            placeholder={String(this.state.currentPeople)}
+            placeholder={String(this.notState.currentPeople)}
             action={(people) => {
               this.setCurrentPeople(people);
             }}
@@ -115,20 +122,13 @@ export default class InAppSettingsScreen extends Component {
           <View style={styles.actionButtons}>
             <ActionButton
               message={'Save'}
-              width={150}
-              height={60}
-              fontSize={22}
+              width={wp('40%')}
+              height={hp('9%')}
+              fontSize={hp('3.5%')}
               action={this.goBack}
             />
-            {/* <ActionButton
-              message={'Exit'}
-              width={200}
-              height={87}
-              fontSize={36}
-              action={this.goHome}
-            /> */}
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     );
   }
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.background,
-    paddingTop: 50,
+    paddingTop: getStatusBarHeight() + 5,
     paddingHorizontal: 20,
   },
   actionButtons: {

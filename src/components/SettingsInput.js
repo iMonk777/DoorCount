@@ -1,10 +1,15 @@
 import React from 'react';
 import {View, Text, StyleSheet, TextInput} from 'react-native';
 import {color} from '../Styles/colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export default function SettingsInput({message, placeholder, action}) {
   const changeText = (person) => {
-    action(person);
+    Number(person) < 9999 ? action(person) : action(9999);
+    // action(person);
   };
   return (
     <View style={styles.container}>
@@ -23,26 +28,28 @@ export default function SettingsInput({message, placeholder, action}) {
 const styles = StyleSheet.create({
   container: {
     margin: 10,
-    height: 154,
+    height: hp('17%'),
     backgroundColor: color.actionButton,
-    borderRadius: 18,
+    borderRadius: hp('2%'),
     padding: 11,
+    justifyContent: 'space-evenly',
   },
   message: {
     color: color.text,
     fontWeight: 'bold',
-    fontSize: 24,
+    fontSize: hp('2.5%'),
     width: '100%',
     textAlign: 'center',
     marginBottom: 10,
   },
   input: {
-    height: 93,
-    borderWidth: 1,
-    borderRadius: 18,
+    height: hp('10%'),
+    borderRadius: hp('2%'),
     backgroundColor: color.background,
-    fontSize: 48,
+    fontSize: hp('7%'),
     textAlign: 'center',
+    textAlignVertical: 'center',
+    padding: 0,
     fontWeight: 'bold',
     color: color.text,
   },

@@ -1,6 +1,10 @@
 import React from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import {color} from '../Styles/colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export default function ReportInfo({message, value}) {
   return (
@@ -17,17 +21,18 @@ export default function ReportInfo({message, value}) {
 
 const styles = StyleSheet.create({
   container: {
-    height: 120,
+    height: hp('13.4%'),
     flex: 1,
     backgroundColor: color.background,
     flexDirection: 'column',
     backgroundColor: color.actionButton,
-    borderRadius: 18,
+    borderRadius: hp('2%'),
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 8,
     paddingBottom: 8,
     margin: 8,
+    margin: hp('0.8%'),
   },
   messageContainer: {
     flex: 1,
@@ -35,7 +40,7 @@ const styles = StyleSheet.create({
   },
   message: {
     color: color.text,
-    fontSize: 18,
+    fontSize: hp('2%'),
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -43,12 +48,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: color.background,
-    borderRadius: 16,
+    borderRadius: hp('1.7%'),
     width: '100%',
   },
   value: {
     color: color.textPlaceholder,
-    fontSize: 36,
+    fontSize: hp('4%'),
     fontWeight: 'bold',
     textAlign: 'center',
   },
