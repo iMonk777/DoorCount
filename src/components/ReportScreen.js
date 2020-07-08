@@ -5,6 +5,11 @@ import ActionButton from './ActionButton';
 import AsyncStorage from '@react-native-community/async-storage';
 import {SlideAreaChart} from 'react-native-slide-charts';
 import ReportInfo from './ReportInfo';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 export default class ReportScreen extends Component {
   state = {
@@ -32,78 +37,83 @@ export default class ReportScreen extends Component {
       const parsedCounts = jsonCounts != null ? JSON.parse(jsonCounts) : null;
       return await parsedCounts;
     } catch (e) {
-      console.log(e);
+      console.log('asdasda');
     }
   };
 
   // Did mount <--------------
   async componentDidMount() {
     let counts = await this.getCounts();
-    let peopleCountList = counts.map((o) => {
-      return o.y;
-    });
+    console.log('What is this counts', counts);
 
-    let maxCount = Math.max.apply(Math, peopleCountList);
-
-    let averagePeople = Math.round(
-      peopleCountList.reduce(function (a, b) {
-        return a + b;
-      }, 0) / counts.length,
-    );
-
-    let busiestTimeStamp =
-      counts[counts.findIndex((o) => o.y == maxCount)].timeStamp;
-
-    let busiestTimeHour = await String(new Date(busiestTimeStamp).getHours());
-    let busiestTimeMinute = await String(
-      new Date(busiestTimeStamp).getMinutes(),
-    );
-    Number(busiestTimeHour) < 10
-      ? (busiestTimeHour = '0' + busiestTimeHour)
-      : null;
-    Number(busiestTimeMinute) < 10
-      ? (busiestTimeMinute = '0' + busiestTimeMinute)
-      : null;
-
-    let busiestTime = `${busiestTimeHour}:${busiestTimeMinute}`;
-
-    let newPeople = [];
-    for (let i = 1; i < counts.length; i++) {
-      if (counts[i].y > counts[i - 1].y) {
-        newPeople.push(counts[i].y - counts[i - 1].y);
-      }
-    }
-    let totalCountedPeople = newPeople.reduce((a, b) => a + b, 0) + 1;
-
-    let interval;
-    if (maxCount <= 10) {
-      interval = 1;
-    } else if (maxCount <= 30 && maxCount > 10) {
-      interval = 2;
-    } else if (maxCount <= 50 && maxCount > 30) {
-      interval = 5;
-    } else if (maxCount <= 100 && maxCount > 50) {
-      interval = 10;
-    } else if (maxCount <= 200 && maxCount > 100) {
-      interval = 20;
-    } else if (maxCount <= 500 && maxCount > 200) {
-      interval = 50;
-    } else if (maxCount <= 1000 && maxCount > 500) {
-      interval = 100;
-    } else {
-      interval = 1000;
-    }
-
-    if (typeof counts === 'object' && counts.length !== 0) {
-      this.setState({
-        counts: counts,
-        numberOfTicks: maxCount / 2,
-        interval: interval,
-        maxPeopleInside: maxCount,
-        totalCountedPeople: totalCountedPeople,
-        busiestTime: busiestTime,
-        averagePeopleInside: averagePeople,
+    if (counts.length > 0) {
+      let peopleCountList = counts.map((o) => {
+        return o.y;
       });
+
+      let maxCount = Math.max.apply(Math, peopleCountList);
+
+      let averagePeople = Math.round(
+        peopleCountList.reduce(function (a, b) {
+          return a + b;
+        }, 0) / counts.length,
+      );
+
+      let busiestTimeStamp = await counts[
+        counts.findIndex((o) => o.y == maxCount)
+      ].timeStamp;
+
+      let busiestTimeHour = await String(new Date(busiestTimeStamp).getHours());
+      let busiestTimeMinute = await String(
+        new Date(busiestTimeStamp).getMinutes(),
+      );
+      Number(busiestTimeHour) < 10
+        ? (busiestTimeHour = '0' + busiestTimeHour)
+        : null;
+      Number(busiestTimeMinute) < 10
+        ? (busiestTimeMinute = '0' + busiestTimeMinute)
+        : null;
+
+      let busiestTime = `${busiestTimeHour}:${busiestTimeMinute}`;
+
+      let newPeople = [];
+      for (let i = 1; i < counts.length; i++) {
+        if (counts[i].y > counts[i - 1].y) {
+          newPeople.push(counts[i].y - counts[i - 1].y);
+        }
+      }
+      let totalCountedPeople = newPeople.reduce((a, b) => a + b, 0) + 1;
+
+      let interval;
+      if (maxCount <= 10) {
+        interval = 1;
+      } else if (maxCount <= 30 && maxCount > 10) {
+        interval = 2;
+      } else if (maxCount <= 50 && maxCount > 30) {
+        interval = 5;
+      } else if (maxCount <= 100 && maxCount > 50) {
+        interval = 10;
+      } else if (maxCount <= 200 && maxCount > 100) {
+        interval = 20;
+      } else if (maxCount <= 500 && maxCount > 200) {
+        interval = 50;
+      } else if (maxCount <= 1000 && maxCount > 500) {
+        interval = 100;
+      } else {
+        interval = 1000;
+      }
+
+      if (typeof counts === 'object' && counts.length !== 0) {
+        this.setState({
+          counts: counts,
+          numberOfTicks: maxCount,
+          interval: interval,
+          maxPeopleInside: maxCount,
+          totalCountedPeople: totalCountedPeople,
+          busiestTime: busiestTime,
+          averagePeopleInside: averagePeople,
+        });
+      }
     }
   }
 
@@ -146,7 +156,8 @@ export default class ReportScreen extends Component {
           chartLineColor={color.actionButton}
           shouldCancelWhenOutside={false}
           width={Dimensions.get('window').width - 36}
-          height={200}
+          // height={200}
+          height={hp('30%')}
           data={this.state.counts}
           axisWidth={40}
           axisHeight={40}
@@ -189,7 +200,7 @@ export default class ReportScreen extends Component {
             value={this.state.maxPeopleInside}
           />
           <ReportInfo
-            message={'Total counted people'}
+            message={'Total people counted'}
             value={this.state.totalCountedPeople}
           />
         </View>
@@ -217,9 +228,9 @@ export default class ReportScreen extends Component {
         <View style={styles.actionButtonContainer}>
           <ActionButton
             message={'Back'}
-            width={150}
-            height={60}
-            fontSize={22}
+            width={wp('40%')}
+            height={hp('9%')}
+            fontSize={hp('3.5%')}
             action={this.goBack}
           />
         </View>
@@ -232,26 +243,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.background,
-    paddingTop: 50,
+    paddingTop: getStatusBarHeight() + 5,
     paddingBottom: 20,
     paddingHorizontal: 10,
     flexDirection: 'column',
     justifyContent: 'flex-start',
-  },
-  lineChart: {
-    height: 300,
-    width: '100%',
-    backgroundColor: color.actionButton,
-    borderRadius: 18,
-    justifyContent: 'flex-end',
   },
   reportInfoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   actionButtonContainer: {
-    // borderWidth: 1,
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
   },
 });

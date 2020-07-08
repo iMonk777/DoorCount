@@ -4,12 +4,19 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
+  StatusBar,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {color} from '../Styles/colors';
 import SettingInput from './SettingsInput';
 import SettingsToggle from './SettingsToggle';
 import ActionButton from './ActionButton';
 import AsyncStorage from '@react-native-community/async-storage';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 export default class InitSettingsScreen extends Component {
   state = {
@@ -67,10 +74,12 @@ export default class InitSettingsScreen extends Component {
   render() {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+          style={styles.container}>
+          <StatusBar barStyle="light-content"></StatusBar>
           <SettingInput
             message={'Add a person limit'}
-            people={60}
             placeholder={'30'}
             action={(limit) => {
               this.changelimit(limit);
@@ -78,7 +87,6 @@ export default class InitSettingsScreen extends Component {
           />
           <SettingInput
             message={'People currently inside'}
-            people={4}
             placeholder={'0'}
             action={(people) => {
               this.setCurrentPeople(people);
@@ -96,21 +104,14 @@ export default class InitSettingsScreen extends Component {
           />
           <View style={styles.actionButtons}>
             <ActionButton
-              message={'Back'}
-              width={150}
-              height={60}
-              fontSize={22}
-              action={this.goBack}
-            />
-            <ActionButton
               message={'Start'}
-              width={200}
-              height={87}
-              fontSize={36}
+              width={wp('45%')}
+              height={hp('10%')}
+              fontSize={hp('4.3%')}
               action={this.goToCountScreen}
             />
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     );
   }
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.background,
-    paddingTop: 50,
+    paddingTop: getStatusBarHeight() + 5,
     paddingHorizontal: 20,
   },
   actionButtons: {

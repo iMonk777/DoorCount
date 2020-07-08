@@ -1,13 +1,17 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {color} from '../Styles/colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export default function ExitMenu({hideExitMenu, goToHomeScreen}) {
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
         <Text style={styles.message}>Are you sure you want to exit?</Text>
-        <Text style={styles.message}>Your counts will be lost</Text>
+        <Text style={styles.message}>Your count will be lost</Text>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={goToHomeScreen}>
@@ -28,15 +32,15 @@ export default function ExitMenu({hideExitMenu, goToHomeScreen}) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: color.actionButton,
-    borderRadius: 18,
+    borderRadius: hp('2%'),
     width: '100%',
-    height: 186,
+    height: hp('20%'),
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
   message: {
     color: color.text,
-    fontSize: 23,
+    fontSize: hp('2.6%'),
     fontWeight: 'bold',
   },
   textContainer: {
@@ -50,15 +54,15 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: color.background,
-    borderRadius: 18,
-    width: 128,
-    height: 61,
+    borderRadius: hp('2%'),
+    width: hp('14.5%'),
+    height: hp('7%'),
     justifyContent: 'center',
     alignItems: 'center',
   },
   buttonText: {
     color: color.text,
-    fontSize: 30,
+    fontSize: hp('3.3%'),
     fontWeight: 'bold',
   },
 });

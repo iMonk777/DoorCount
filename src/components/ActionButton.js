@@ -1,6 +1,10 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {color} from '../Styles/colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export default function ActionButton({
   message,
@@ -17,7 +21,7 @@ export default function ActionButton({
     },
     container: {
       backgroundColor: color.actionButton,
-      borderRadius: 18,
+      borderRadius: hp('2%'),
       width: width,
       height: height,
       justifyContent: 'center',

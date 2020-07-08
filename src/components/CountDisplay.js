@@ -3,6 +3,10 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {color} from '../Styles/colors';
 import {Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 export default function CountDisplay({counter, limit, showExitMenu}) {
   const counterStyles = StyleSheet.create({
@@ -13,7 +17,7 @@ export default function CountDisplay({counter, limit, showExitMenu}) {
           : counter > limit
           ? color.countSad
           : color.countNeutral,
-      fontSize: 144,
+      fontSize: hp('15%'),
       textAlign: 'center',
     },
   });
@@ -74,49 +78,42 @@ const styles = StyleSheet.create({
     backgroundColor: color.background,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    // borderWidth: 2,
-    // borderColor: 'white',
-    padding: 20,
+    padding: wp('5%'),
   },
   bottomIconContainer: {
-    // borderWidth: 3,
-    // borderColor: 'red',
     alignSelf: 'flex-end',
-    height: 90,
+    height: hp('10%'),
     justifyContent: 'flex-end',
   },
   topIconContainer: {
-    // borderWidth: 3,
-    // borderColor: 'red',
     alignSelf: 'flex-end',
-    height: 90,
+    height: hp('10%'),
     justifyContent: 'center',
   },
   settingsAndGraph: {
-    // borderWidth: 1,
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
   icon: {
     color: color.text,
-    fontSize: 50,
+    fontSize: hp('5.5%'),
   },
   exitIcon: {
     color: color.text,
-    fontSize: 50,
+    fontSize: hp('5.5%'),
     transform: [{rotateY: '180deg'}],
   },
   limitIcon: {
     color: color.countSad,
-    fontSize: 80,
+    fontSize: hp('9%'),
     alignSelf: 'center',
   },
   limitText: {
     position: 'absolute',
-    bottom: '30%',
+    bottom: '25%',
     color: color.text,
     alignSelf: 'center',
-    fontSize: 16,
+    fontSize: hp('2%'),
     fontWeight: 'bold',
   },
 });
