@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import * as React from 'react';
 import {
   View,
   StyleSheet,
@@ -17,8 +17,10 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {connect} from 'react-redux';
+import {logIn} from './HomeScreen';
 
-export default class InitSettingsScreen extends Component {
+class InitSettingsScreen extends React.Component {
   state = {
     countLimit: 30,
     currentPeople: 0,
@@ -63,8 +65,12 @@ export default class InitSettingsScreen extends Component {
 
   goToCountScreen = async () => {
     await this.storeSettings(this.state);
-    this.props.navigation.navigate('CountScreen');
+    await AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
+
     this.storeEmpty();
+    this.props.logIn();
+
+    // this.props.navigation.navigate('CountScreen');
   };
 
   storeEmpty = async () => {
@@ -72,6 +78,8 @@ export default class InitSettingsScreen extends Component {
   };
 
   render() {
+    console.log('these are initsettingsProps', this.props);
+
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <KeyboardAvoidingView
@@ -108,6 +116,7 @@ export default class InitSettingsScreen extends Component {
               width={wp('45%')}
               height={hp('10%')}
               fontSize={hp('4.3%')}
+              // action={this.props.logIn}
               action={this.goToCountScreen}
             />
           </View>
@@ -116,6 +125,21 @@ export default class InitSettingsScreen extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    isLoggedIn: state.isLoggedIn,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logIn: () => dispatch(logIn()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(InitSettingsScreen);
 
 const styles = StyleSheet.create({
   container: {
