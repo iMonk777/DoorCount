@@ -11,8 +11,10 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {connect} from 'react-redux';
+import {logOut} from './HomeScreen';
 
-export default class CountScreen extends Component {
+class CountScreen extends Component {
   state = {
     countLimit: 30,
     currentPeople: 0,
@@ -119,9 +121,12 @@ export default class CountScreen extends Component {
     });
   };
 
-  goToHomeScreen = () => {
-    this.props.navigation.navigate('InitSettings');
+  goToHomeScreen = async () => {
+    // this.props.navigation.navigate('InitSettings');
+    await AsyncStorage.setItem('isLoggedIn', JSON.stringify(false));
+
     this.storeEmpty();
+    this.props.logOut();
   };
 
   storeEmpty = async () => {
@@ -139,7 +144,8 @@ export default class CountScreen extends Component {
     this.focusListener = this.props.navigation.addListener('focus', () => {
       this.onFocusHandler();
     });
-    this.focusListener = this.props.navigation.addListener('blur', () => {
+
+    this.blurListener = this.props.navigation.addListener('blur', () => {
       this.onBlurHandler();
     });
   }
@@ -178,6 +184,21 @@ export default class CountScreen extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    isLoggedIn: state.isLoggedIn,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logOut: () => dispatch(logOut()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CountScreen);
 
 const styles = StyleSheet.create({
   container: {
