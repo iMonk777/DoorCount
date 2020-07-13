@@ -12,12 +12,14 @@ export default function ActionButton({
   height,
   fontSize,
   action,
+  oneHanded,
 }) {
   const styles = StyleSheet.create({
     touchable: {
       width: width,
       height: height,
       alignSelf: 'center',
+      marginVertical: oneHanded ? hp('1%') : null,
     },
     container: {
       backgroundColor: color.actionButton,

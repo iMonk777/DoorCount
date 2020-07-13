@@ -58,11 +58,12 @@ class HomeScreen extends React.Component {
     isLoggedIn: false,
   };
 
-  async componentDidMount() {
+  getLoginState = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('isLoggedIn');
       let isLoggedIn = JSON.parse(jsonValue);
 
+      isLoggedIn == true ? this.props.logIn() : null;
       isLoggedIn == true
         ? this.setState({
             isLoading: false,
@@ -70,11 +71,13 @@ class HomeScreen extends React.Component {
         : this.setState({
             isLoading: false,
           });
-
-      isLoggedIn == true ? this.props.logIn() : null;
     } catch (e) {
       console.log(e);
     }
+  };
+
+  async componentDidMount() {
+    await setTimeout(this.getLoginState, 800);
   }
 
   render() {

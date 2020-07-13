@@ -8,7 +8,12 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-export default function CountDisplay({counter, limit, showExitMenu}) {
+export default function CountDisplay({
+  counter,
+  limit,
+  showExitMenu,
+  storeCountsToAsync,
+}) {
   const counterStyles = StyleSheet.create({
     counter: {
       color:
@@ -23,6 +28,11 @@ export default function CountDisplay({counter, limit, showExitMenu}) {
   });
 
   const navigation = useNavigation();
+
+  const navigateToReport = async () => {
+    await storeCountsToAsync();
+    navigation.navigate('ReportScreen');
+  };
 
   return (
     <View style={styles.container}>
@@ -54,9 +64,7 @@ export default function CountDisplay({counter, limit, showExitMenu}) {
       <View style={styles.settingsAndGraph}>
         <TouchableOpacity
           style={styles.bottomIconContainer}
-          onPress={() => {
-            navigation.navigate('ReportScreen');
-          }}>
+          onPress={navigateToReport}>
           <Icon style={styles.icon} name={'graph'} type={'SimpleLineIcons'} />
         </TouchableOpacity>
 
