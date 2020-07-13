@@ -1,14 +1,16 @@
 import React from 'react';
 import {View, Text, StyleSheet, TextInput} from 'react-native';
 import {color} from '../Styles/colors';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export default function SettingsInput({message, placeholder, action}) {
   const changeText = (person) => {
-    Number(person) < 9999 ? action(person) : action(9999);
+    let cleanPerson = person
+      .replace(/-/g, '')
+      .replace(/ /g, '')
+      .replace(/,/g, '')
+      .replace(/\./g, '');
+    Number(cleanPerson) < 9999 ? action(cleanPerson) : action(9999);
     // action(person);
   };
   return (

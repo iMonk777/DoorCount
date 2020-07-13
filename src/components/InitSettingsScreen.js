@@ -4,7 +4,6 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
-  StatusBar,
   KeyboardAvoidingView,
 } from 'react-native';
 import {color} from '../Styles/colors';
@@ -16,7 +15,6 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {connect} from 'react-redux';
 import {logIn} from './HomeScreen';
 
@@ -59,18 +57,12 @@ class InitSettingsScreen extends React.Component {
     });
   };
 
-  goBack = () => {
-    this.props.navigation.goBack();
-  };
-
   goToCountScreen = async () => {
     await this.storeSettings(this.state);
     await AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
 
     this.storeEmpty();
     this.props.logIn();
-
-    // this.props.navigation.navigate('CountScreen');
   };
 
   storeEmpty = async () => {
@@ -78,14 +70,11 @@ class InitSettingsScreen extends React.Component {
   };
 
   render() {
-    console.log('these are initsettingsProps', this.props);
-
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <KeyboardAvoidingView
           behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
           style={styles.container}>
-          <StatusBar barStyle="light-content"></StatusBar>
           <SettingInput
             message={'Add a person limit'}
             placeholder={'30'}
@@ -127,7 +116,6 @@ class InitSettingsScreen extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     isLoggedIn: state.isLoggedIn,
   };
@@ -145,7 +133,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.background,
-    paddingTop: getStatusBarHeight() + 5,
     paddingHorizontal: 20,
   },
   actionButtons: {

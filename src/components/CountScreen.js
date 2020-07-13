@@ -1,16 +1,11 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, Vibration} from 'react-native';
+import {View, StyleSheet, Vibration} from 'react-native';
 import ActionButton from './ActionButton';
 import {color} from '../Styles/colors';
 import CountDisplay from './CountDisplay';
 import AsyncStorage from '@react-native-community/async-storage';
-import {useIsFocused} from '@react-navigation/native';
 import ExitMenu from './ExitMenu';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {connect} from 'react-redux';
 import {logOut} from './HomeScreen';
 
@@ -41,6 +36,8 @@ class CountScreen extends Component {
   };
 
   storeCountsToAsync = async () => {
+    console.log(this.counts);
+    console.log(this.state.startTime);
     let storedAsyncCounts = [];
     try {
       const jsonCounts = await AsyncStorage.getItem('counts');
@@ -122,9 +119,7 @@ class CountScreen extends Component {
   };
 
   goToHomeScreen = async () => {
-    // this.props.navigation.navigate('InitSettings');
     await AsyncStorage.setItem('isLoggedIn', JSON.stringify(false));
-
     this.storeEmpty();
     this.props.logOut();
   };
@@ -186,7 +181,6 @@ class CountScreen extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     isLoggedIn: state.isLoggedIn,
   };
@@ -204,7 +198,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.background,
-    paddingTop: getStatusBarHeight() + 5,
     paddingBottom: 20,
     paddingHorizontal: 20,
     flexDirection: 'column',

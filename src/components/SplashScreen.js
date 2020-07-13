@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {color} from '../Styles/colors';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 export default function SplashScreen() {
   return (
@@ -15,7 +14,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.background,
-    paddingTop: getStatusBarHeight() + 5,
     paddingHorizontal: 20,
     justifyContent: 'center',
   },

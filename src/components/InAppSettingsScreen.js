@@ -11,12 +11,10 @@ import SettingInput from './SettingsInput';
 import SettingsToggle from './SettingsToggle';
 import ActionButton from './ActionButton';
 import AsyncStorage from '@react-native-community/async-storage';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {set} from 'react-native-reanimated';
 
 export default class InAppSettingsScreen extends Component {
   state = {
@@ -138,7 +136,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.background,
-    paddingTop: getStatusBarHeight() + 5,
     paddingHorizontal: 20,
   },
   actionButtons: {
