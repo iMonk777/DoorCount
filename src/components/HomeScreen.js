@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {View, StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import InitSettingsScreen from './InitSettingsScreen';
@@ -9,27 +9,10 @@ import InAppSettingsScreen from './InAppSettingsScreen';
 import ReportScreen from './ReportScreen';
 import SplashScreen from './SplashScreen';
 import AsyncStorage from '@react-native-community/async-storage';
-import {createStore, combineReducers} from 'redux';
+import {createStore} from 'redux';
 import {connect} from 'react-redux';
-
-// function counter(state = 0, action) {
-//   switch (action.type) {
-//     case 'INCREMENT':
-//       return state + 1;
-//     case 'DECREMENT':
-//       return state - 1;
-//     default:
-//       return state;
-//   }
-// }
-
-// export const store = createStore(counter);
-
-// store.subscribe(() => console.log(store.getState()));
-
-// store.dispatch({type: 'INCREMENT'});
-// store.dispatch({type: 'INCREMENT'});
-// store.dispatch({type: 'DECREMENT'});
+import {color} from '../Styles/colors';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 //Actions
 const LOG_IN = 'LOG_IN';
@@ -75,15 +58,10 @@ class HomeScreen extends React.Component {
     isLoggedIn: false,
   };
 
-  testVar = () => {
-    console.warn('it works');
-  };
-
   async componentDidMount() {
     try {
       const jsonValue = await AsyncStorage.getItem('isLoggedIn');
       let isLoggedIn = JSON.parse(jsonValue);
-      console.log('this is the log state: ', isLoggedIn);
 
       isLoggedIn == true
         ? this.setState({
@@ -100,45 +78,55 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    console.log('these are the props', this.props);
-    return this.state.isLoading ? (
-      <SplashScreen></SplashScreen>
-    ) : (
-      <NavigationContainer>
-        {this.props.isLoggedIn == true ? (
-          <Stack.Navigator initialRouteName="CountScreen">
-            <Stack.Screen
-              name="CountScreen"
-              component={CountScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="InAppSettings"
-              component={InAppSettingsScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="ReportScreen"
-              component={ReportScreen}
-              options={{headerShown: false}}
-            />
-          </Stack.Navigator>
+    return (
+      <View
+        style={{
+          flex: 1,
+          paddingTop: getStatusBarHeight() + 5,
+          backgroundColor: color.background,
+        }}>
+        {this.state.isLoading ? (
+          <SplashScreen></SplashScreen>
         ) : (
-          <Stack.Navigator initialRouteName="InitSettings">
-            <Stack.Screen
-              name="InitSettings"
-              component={InitSettingsScreen}
-              options={{headerShown: false}}
-            />
-          </Stack.Navigator>
+          <NavigationContainer>
+            <StatusBar
+              barStyle="light-content"
+              backgroundColor={color.background}></StatusBar>
+            {this.props.isLoggedIn == true ? (
+              <Stack.Navigator initialRouteName="CountScreen">
+                <Stack.Screen
+                  name="CountScreen"
+                  component={CountScreen}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="InAppSettings"
+                  component={InAppSettingsScreen}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="ReportScreen"
+                  component={ReportScreen}
+                  options={{headerShown: false}}
+                />
+              </Stack.Navigator>
+            ) : (
+              <Stack.Navigator initialRouteName="InitSettings">
+                <Stack.Screen
+                  name="InitSettings"
+                  component={InitSettingsScreen}
+                  options={{headerShown: false}}
+                />
+              </Stack.Navigator>
+            )}
+          </NavigationContainer>
         )}
-      </NavigationContainer>
+      </View>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     isLoggedIn: state.isLoggedIn,
   };
@@ -150,14 +138,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-// export default HomeScreen;
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
-
-const styles = StyleSheet.create({
-  home: {
-    flex: 1,
-    // backgroundColor: color.background,
-    paddingTop: 50,
-    paddingHorizontal: 20,
-  },
-});

@@ -1,10 +1,7 @@
 import React from 'react';
 import {View, Text, Switch, StyleSheet} from 'react-native';
 import {color} from '../Styles/colors';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export default function SettingsToggle({message, action, value}) {
   return (

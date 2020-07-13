@@ -4,12 +4,12 @@ import {color} from '../Styles/colors';
 import ActionButton from './ActionButton';
 import AsyncStorage from '@react-native-community/async-storage';
 import {SlideAreaChart} from 'react-native-slide-charts';
+import * as shape from 'd3-shape';
 import ReportInfo from './ReportInfo';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 export default class ReportScreen extends Component {
   state = {
@@ -36,15 +36,12 @@ export default class ReportScreen extends Component {
       const jsonCounts = await AsyncStorage.getItem('counts');
       const parsedCounts = jsonCounts != null ? JSON.parse(jsonCounts) : null;
       return await parsedCounts;
-    } catch (e) {
-      console.log('asdasda');
-    }
+    } catch (e) {}
   };
 
   // Did mount <--------------
   async componentDidMount() {
     let counts = await this.getCounts();
-    console.log('What is this counts', counts);
 
     if (counts.length > 0) {
       let peopleCountList = counts.map((o) => {
@@ -117,23 +114,23 @@ export default class ReportScreen extends Component {
     }
   }
 
+  lerp = (x, y, a) => x * (1 - a) + y * a;
+
   createGraphMarker = (position) => {
-    let hour = String(
-      new Date(
-        this.state.counts[
-          Math.round((this.state.counts.length - 1) * position)
-        ].timeStamp,
-      ).getHours(),
+    let markerTimeStamp = new Date(
+      Math.round(
+        this.lerp(
+          this.state.counts[0].timeStamp,
+          this.state.counts[this.state.counts.length - 1].timeStamp,
+          position,
+        ),
+      ),
     );
+
+    let hour = String(markerTimeStamp.getHours());
     Number(hour) < 10 ? (hour = '0' + hour) : null;
 
-    let minute = String(
-      new Date(
-        this.state.counts[
-          Math.round((this.state.counts.length - 1) * position)
-        ].timeStamp,
-      ).getMinutes(),
-    );
+    let minute = String(markerTimeStamp.getMinutes());
     Number(minute) < '10' ? (minute = '0' + minute) : null;
 
     let time = `${hour}:${minute}`;
@@ -162,6 +159,7 @@ export default class ReportScreen extends Component {
           axisWidth={40}
           axisHeight={40}
           paddingBottom={0}
+          curveType={shape.curveLinear}
           yAxisProps={{
             interval: this.state.interval,
             verticalLineWidth: 1,
@@ -243,7 +241,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.background,
-    paddingTop: getStatusBarHeight() + 5,
     paddingBottom: 20,
     paddingHorizontal: 10,
     flexDirection: 'column',
