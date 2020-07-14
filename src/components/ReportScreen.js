@@ -24,11 +24,6 @@ export default class ReportScreen extends Component {
 
   goBack = async () => {
     this.props.navigation.goBack();
-    // this.storeEmpty();
-  };
-
-  storeEmpty = async () => {
-    await AsyncStorage.setItem('counts', JSON.stringify([]));
   };
 
   getCounts = async () => {
@@ -247,9 +242,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.background,
-    paddingBottom: 20,
     paddingHorizontal: 10,
-    paddingTop: 10,
+    paddingTop: Platform.OS == 'ios' ? 10 : null,
+    // paddingTop: 10,
     flexDirection: 'column',
     justifyContent: 'flex-start',
   },
