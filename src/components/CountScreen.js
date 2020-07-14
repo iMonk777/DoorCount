@@ -32,12 +32,10 @@ class CountScreen extends Component {
         timeStamp: Date.now(),
       },
     ];
-    this.counts.length == 20 ? this.storeCountsToAsync() : null;
+    this.counts.length == 5 ? this.storeCountsToAsync() : null;
   };
 
   storeCountsToAsync = async () => {
-    console.log(this.counts);
-    console.log(this.state.startTime);
     let storedAsyncCounts = [];
     try {
       const jsonCounts = await AsyncStorage.getItem('counts');
@@ -51,6 +49,7 @@ class CountScreen extends Component {
     try {
       const jsonCounts = JSON.stringify(storedAsyncCounts);
       await AsyncStorage.setItem('counts', jsonCounts);
+
       this.counts = [];
     } catch (e) {
       console.log(e);
@@ -143,6 +142,12 @@ class CountScreen extends Component {
     this.blurListener = this.props.navigation.addListener('blur', () => {
       this.onBlurHandler();
     });
+  }
+
+  async componentWillUnmount() {
+    console.log(this.state);
+    const jsonSettings = JSON.stringify(this.state);
+    await AsyncStorage.setItem('settings', jsonSettings);
   }
 
   render() {
