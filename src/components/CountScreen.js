@@ -16,9 +16,9 @@ class CountScreen extends Component {
     hapticFeedback: true,
     countOverLimit: true,
     isInitialSetting: true,
-    records: [],
     startTime: null,
     isExit: false,
+    oneHanded: true,
   };
 
   counts = [];
@@ -32,7 +32,7 @@ class CountScreen extends Component {
         timeStamp: Date.now(),
       },
     ];
-    this.counts.length == 5 ? this.storeCountsToAsync() : null;
+    this.counts.length == 20 ? this.storeCountsToAsync() : null;
   };
 
   storeCountsToAsync = async () => {
@@ -146,7 +146,40 @@ class CountScreen extends Component {
   }
 
   render() {
-    return (
+    return this.state.oneHanded == true ? (
+      <View style={styles.container}>
+        <CountDisplay
+          counter={this.state.currentPeople}
+          limit={this.state.countLimit}
+          showExitMenu={this.showExitMenu}
+          storeCountsToAsync={this.storeCountsToAsync}
+        />
+        {this.state.isExit == true ? (
+          <ExitMenu
+            hideExitMenu={this.hideExitMenu}
+            goToHomeScreen={this.goToHomeScreen}
+            oneHanded={this.state.oneHanded}
+          />
+        ) : (
+          <ActionButton
+            message={'+'}
+            width={'100%'}
+            height={hp('20%')}
+            fontSize={hp('10%')}
+            action={this.countUp}
+            oneHanded={this.state.oneHanded}
+          />
+        )}
+        <ActionButton
+          message={'-'}
+          width={'100%'}
+          height={hp('20%')}
+          fontSize={hp('10%')}
+          action={this.countDown}
+          oneHanded={this.state.oneHanded}
+        />
+      </View>
+    ) : (
       <View style={styles.container}>
         {this.state.isExit == true ? (
           <ExitMenu
@@ -167,6 +200,7 @@ class CountScreen extends Component {
           counter={this.state.currentPeople}
           limit={this.state.countLimit}
           showExitMenu={this.showExitMenu}
+          storeCountsToAsync={this.storeCountsToAsync}
         />
         <ActionButton
           message={'-'}

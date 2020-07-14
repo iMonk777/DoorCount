@@ -160,6 +160,12 @@ export default class ReportScreen extends Component {
           axisHeight={40}
           paddingBottom={0}
           curveType={shape.curveLinear}
+          cursorProps={{
+            cursorMarkerHeight: 24,
+          }}
+          toolTipProps={{
+            backgroundColor: 'red',
+          }}
           yAxisProps={{
             interval: this.state.interval,
             verticalLineWidth: 1,
@@ -243,6 +249,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.background,
     paddingBottom: 20,
     paddingHorizontal: 10,
+    paddingTop: 10,
     flexDirection: 'column',
     justifyContent: 'flex-start',
   },

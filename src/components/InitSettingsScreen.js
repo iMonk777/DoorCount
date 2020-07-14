@@ -26,6 +26,7 @@ class InitSettingsScreen extends React.Component {
     countOverLimit: true,
     isInitialSetting: true,
     startTime: Date.now(),
+    oneHanded: true,
   };
 
   storeSettings = async (settings) => {
@@ -54,6 +55,12 @@ class InitSettingsScreen extends React.Component {
   toggleCountOverLimit = () => {
     this.setState({
       countOverLimit: !this.state.countOverLimit,
+    });
+  };
+
+  toggleOneHanded = () => {
+    this.setState({
+      oneHanded: !this.state.oneHanded,
     });
   };
 
@@ -90,7 +97,7 @@ class InitSettingsScreen extends React.Component {
             }}
           />
           <SettingsToggle
-            message={'Haptic feedback'}
+            message={'Button vibration'}
             value={this.state.hapticFeedback}
             action={this.toggleHapticFeedback}
           />
@@ -99,13 +106,17 @@ class InitSettingsScreen extends React.Component {
             value={this.state.countOverLimit}
             action={this.toggleCountOverLimit}
           />
+          <SettingsToggle
+            message={'One hand layout'}
+            value={this.state.oneHanded}
+            action={this.toggleOneHanded}
+          />
           <View style={styles.actionButtons}>
             <ActionButton
               message={'Start'}
               width={wp('45%')}
               height={hp('10%')}
               fontSize={hp('4.3%')}
-              // action={this.props.logIn}
               action={this.goToCountScreen}
             />
           </View>

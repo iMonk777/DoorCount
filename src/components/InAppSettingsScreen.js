@@ -23,6 +23,7 @@ export default class InAppSettingsScreen extends Component {
     hapticFeedback: true,
     countOverLimit: true,
     isInitialSetting: true,
+    oneHanded: true,
   };
 
   getSettings = async () => {
@@ -60,6 +61,12 @@ export default class InAppSettingsScreen extends Component {
   toggleCountOverLimit = () => {
     this.setState({
       countOverLimit: !this.state.countOverLimit,
+    });
+  };
+
+  toggleOneHanded = () => {
+    this.setState({
+      oneHanded: !this.state.oneHanded,
     });
   };
 
@@ -108,7 +115,7 @@ export default class InAppSettingsScreen extends Component {
             }}
           />
           <SettingsToggle
-            message={'Haptic feedback'}
+            message={'Button vibration'}
             value={this.state.hapticFeedback}
             action={this.toggleHapticFeedback}
           />
@@ -116,6 +123,11 @@ export default class InAppSettingsScreen extends Component {
             message={'Allow count over limit'}
             value={this.state.countOverLimit}
             action={this.toggleCountOverLimit}
+          />
+          <SettingsToggle
+            message={'One hand layout'}
+            value={this.state.oneHanded}
+            action={this.toggleOneHanded}
           />
           <View style={styles.actionButtons}>
             <ActionButton
